@@ -63,19 +63,17 @@ class TTT(tk.Tk):
         Click this button to exit game
 
         '''
-        #vvvvvvvvvvvvvvvvvvv  DO NOT CHANGE  vvvvvvvvvvvvvvvvvvv
         self.control_frame = tk.Frame()
         self.control_frame.pack(side=tk.TOP)
 
         self.b_quit = tk.Button(self.control_frame, text='Quit',
                                 command=self.quit)
         self.b_quit.pack(side=tk.RIGHT)
-        #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
     def create_status_frame(self):
         '''
         Status UI that shows "Hold" or "Ready"
         '''
-        #vvvvvvvvvvvvvvvvvvv  DO NOT CHANGE  vvvvvvvvvvvvvvvvvvv
         self.status_frame = tk.Frame()
         self.status_frame.pack(expand=True,anchor='w',padx=20)
         
@@ -83,25 +81,21 @@ class TTT(tk.Tk):
         self.l_status_bullet.pack(side=tk.LEFT,anchor='w')
         self.l_status = tk.Label(self.status_frame,font=('Helevetica',25,'bold'),justify='left')
         self.l_status.pack(side=tk.RIGHT,anchor='w')
-        #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         
     def create_result_frame(self):
         '''
         UI that shows Result
         '''
-        #vvvvvvvvvvvvvvvvvvv  DO NOT CHANGE  vvvvvvvvvvvvvvvvvvv
         self.result_frame = tk.Frame()
         self.result_frame.pack(expand=True,anchor='w',padx=20)
         
         self.l_result = tk.Label(self.result_frame,font=('Helevetica',25,'bold'),justify='left')
         self.l_result.pack(side=tk.BOTTOM,anchor='w')
-        #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         
     def create_debug_frame(self):
         '''
         Debug UI that gets input from the user
         '''
-        #vvvvvvvvvvvvvvvvvvv  DO NOT CHANGE  vvvvvvvvvvvvvvvvvvv
         self.debug_frame = tk.Frame()
         self.debug_frame.pack(expand=True)
         
@@ -109,14 +103,12 @@ class TTT(tk.Tk):
         self.t_debug.pack(side=tk.LEFT)
         self.b_debug = tk.Button(self.debug_frame,text="Send",command=self.send_debug)
         self.b_debug.pack(side=tk.RIGHT)
-        #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         
     
     def create_board_frame(self):
         '''
         Tic-Tac-Toe Board UI
         '''
-        #vvvvvvvvvvvvvvvvvvv  DO NOT CHANGE  vvvvvvvvvvvvvvvvvvv
         self.board_frame = tk.Frame()
         self.board_frame.pack(expand=True)
 
@@ -136,7 +128,6 @@ class TTT(tk.Tk):
             r, c = divmod(i, self.line_size)
             self.cell[i].grid(row=r, column=c,sticky="nsew")
             
-        #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     def play(self, start_user=1):
         '''
@@ -144,7 +135,6 @@ class TTT(tk.Tk):
         
         start_user: if its 0, start by "server" and if its 1, start by "client"
         '''
-        #vvvvvvvvvvvvvvvvvvv  DO NOT CHANGE  vvvvvvvvvvvvvvvvvvv
         self.last_click = 0
         self.create_board_frame()
         self.create_status_frame()
@@ -164,15 +154,12 @@ class TTT(tk.Tk):
             self.l_status_bullet.config(fg='red') 
             self.l_status['text'] = ['Hold']
             _thread.start_new_thread(self.get_move,()) 
-        #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     def quit(self):
         '''
         Call this function to close GUI
         '''
-        #vvvvvvvvvvvvvvvvvvv  DO NOT CHANGE  vvvvvvvvvvvvvvvvvvv
         self.destroy()
-        #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         
     def my_move(self, e, user_move):    
         '''
@@ -181,7 +168,6 @@ class TTT(tk.Tk):
         e: event
         user_move: button number, from 0 to 8 
         '''
-        #vvvvvvvvvvvvvvvvvvv  DO NOT CHANGE  vvvvvvvvvvvvvvvvvvv
         
         # When it is not my turn or the selected location is already taken, do nothing
         if self.board[user_move] != 0 or not self.my_turn:
@@ -202,7 +188,6 @@ class TTT(tk.Tk):
             self.l_status_bullet.config(fg='red')
             self.l_status ['text'] = ['Hold']
             _thread.start_new_thread(self.get_move,())
-        #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     def get_move(self):
         '''
@@ -213,7 +198,6 @@ class TTT(tk.Tk):
         loc 변수에 메시지의 위치를 버튼 번호로 바꾸어 저장 후
         보드에 업데이트하고 차례 바꿈
         '''
-        ###################  Fill Out  #######################
         get_msg = self.socket.recv(100).decode()
         get_msg = get_msg.replace(" ","").split('\r\n') 
 
@@ -232,16 +216,13 @@ class TTT(tk.Tk):
             self.socket.send(ack_msg.encode(encoding='utf-8'))
 
         loc=int(msg_mv1)*3 +int(msg_mv2)
-        ######################################################   
             
             
-        #vvvvvvvvvvvvvvvvvvv  DO NOT CHANGE  vvvvvvvvvvvvvvvvvvv
         self.update_board(self.computer, loc, get=True)
         if self.state == self.active:  
             self.my_turn = 1
             self.l_status_bullet.config(fg='green')
             self.l_status ['text'] = ['Ready']
-        #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                 
 
     def send_debug(self):
@@ -260,7 +241,6 @@ class TTT(tk.Tk):
         d_msg = d_msg.replace("\\r\\n","\r\n")   # msg is sanitized as \r\n is modified when it is given as input
         self.t_debug.delete(1.0,"end")
         
-        ###################  Fill Out  #######################
         debug_msg=d_msg.replace(" ","").split('\r\n')
         row=int(debug_msg[2][10])      
         col=int(debug_msg[2][12])
@@ -289,9 +269,7 @@ class TTT(tk.Tk):
             self.quit()
             return
         
-        ######################################################  
         
-        #vvvvvvvvvvvvvvvvvvv  DO NOT CHANGE  vvvvvvvvvvvvvvvvvvv
         self.update_board(self.user, loc)
             
         if self.state == self.active:    # always after my move
@@ -300,7 +278,6 @@ class TTT(tk.Tk):
             self.l_status ['text'] = ['Hold']
             _thread.start_new_thread(self.get_move,())
             
-        #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         
         
     def send_move(self,selection):
@@ -311,7 +288,6 @@ class TTT(tk.Tk):
         형식 안맞으면 소켓 종료, 게임 종료
         '''
         row,col = divmod(selection,3)
-        ###################  Fill Out  #######################
         send_msg="SEND ETTTP/1.0 \r\n Host: "+self.send_ip+"\r\nNew-Move: ("+str(row)+", "+str(col)+") \r\n\r\n"
         self.socket.send(send_msg.encode(encoding='utf-8'))
 
@@ -328,7 +304,6 @@ class TTT(tk.Tk):
             return
         else:
             return True
-        ######################################################  
 
     
     def check_result(self,winner,get=False):
@@ -346,8 +321,6 @@ class TTT(tk.Tk):
         이긴 쪽이 받은 메시지의 winner와 나의 winner를 비교 후 결과 일치하면 true 리턴 불일치하면 false 리턴
         형식이 안맞으면 소켓 종료, 게임 종료
         '''
-        # no skeleton
-        ###################  Fill Out  #######################
 
         if get == False: #winner
             send_result_msg ="RESULT ETTTP/1.0\r\nHost: "+self.send_ip+"\r\nWinner: ME\r\n\r\n"
@@ -382,10 +355,8 @@ class TTT(tk.Tk):
                 self.socket.close()
                 self.quit()
                 return 
-        ######################################################  
 
         
-    #vvvvvvvvvvvvvvvvvvv  DO NOT CHANGE  vvvvvvvvvvvvvvvvvvv
     def update_board(self, player, move, get=False):
         '''
         This function updates Board if is clicked
@@ -423,19 +394,12 @@ class TTT(tk.Tk):
         for i in line:
             self.cell[i]['bg'] = 'red'
 
-    #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    # End of Root class
-
 
 def check_msg(msg, recv_ip):
     '''
     공백 제거하고 '\r\n'으로 split한 msg의 ETTTP/1.0이 맞는지, 나의 ip가 맞는지 확인하는 함수 
     '''
-    ###################  Fill Out  #######################
-
     if msg[0][len(msg[0])-9:] == "ETTTP/1.0" and msg[1][5:] == recv_ip:  
         return True
     else:
         return False
-    ######################################################  
